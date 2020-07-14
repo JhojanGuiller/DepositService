@@ -65,6 +65,7 @@ public class DepositController {
 		if (cuentaBancaria != null) {
 			madeDeposit(deposit.getIdCuenta(), tipoOperacion, deposit.getMontoDeposito());
 			depositRepository.save(deposit);
+			cuentaBancaria = getBankAccount(deposit.getIdCuenta());
 			return "Deposit made successfully: " + cuentaBancaria.getBody().getMontoCuenta();
 			
 		}else {
