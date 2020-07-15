@@ -51,13 +51,13 @@ public class TransactionController {
 		
 	}
 	
-	@PostMapping("/makeTransaction/{tipoTransaccion}")
-	public String makeTransaction(@RequestBody Transaction transaction, @PathVariable String tipoTransaccion) {
+	@PostMapping("/makeTransaction")
+	public String makeTransaction(@RequestBody Transaction transaction) {
 		ResponseEntity<BankAccount> cuentaBancaria = getBankAccount(transaction.getIdCuenta());
 		
 		//Validar si existe una cuenta bancaria existente
 		if (cuentaBancaria != null) {
-			madeTransaction(transaction.getIdCuenta(), tipoTransaccion, transaction.getMontoTransaccion());
+			madeTransaction(transaction.getIdCuenta(), transaction.getTipoTransaccion(), transaction.getMontoTransaccion());
 			transactionRepository.save(transaction);
 			cuentaBancaria = getBankAccount(transaction.getIdCuenta());
 			return "Transaction made successfully: " + cuentaBancaria.getBody().getMontoCuenta();

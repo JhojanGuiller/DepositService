@@ -16,6 +16,7 @@ public class Transaction {
 	private int idTransaccion;
 	
 	private int idCuenta;	
+	private String tipoTransaccion;
 	private Double montoTransaccion;
 	private String fechaTransaccion;
 	
@@ -37,6 +38,14 @@ public class Transaction {
 		this.idCuenta = idCuenta;
 	}
 
+	public String getTipoTransaccion() {
+		return tipoTransaccion;
+	}
+	
+	public void setTipoTransaccion(String tipoTransaccion) {
+		this.tipoTransaccion = tipoTransaccion;
+	}
+	
 	public Double getMontoTransaccion() {
 		return montoTransaccion;
 	}
@@ -53,10 +62,11 @@ public class Transaction {
 		this.fechaTransaccion = fechaTransaccion;
 	}
 
-	public Transaction(@NotNull int idTransaccion, int idCuenta, Double montoTransaccion, String fechaTransaccion) {
+	public Transaction(@NotNull int idTransaccion, int idCuenta, String tipoTransaccion, Double montoTransaccion, String fechaTransaccion) {
 		super();
 		this.idTransaccion = idTransaccion;
 		this.idCuenta = idCuenta;
+		this.tipoTransaccion = tipoTransaccion;
 		this.montoTransaccion = montoTransaccion;
 		this.fechaTransaccion = fechaTransaccion;
 	}

@@ -3,7 +3,7 @@ transactiondb:
  restart: always
  container_name: "transactiondb"
  ports:
-  - "27017:27017"
+  - "27018:27017"
 
 transactionservice:
  build: .
