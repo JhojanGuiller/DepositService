@@ -2,6 +2,7 @@ package com.jguiller.TransactionService.Controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +25,6 @@ public class TransactionController {
 	
 	@Autowired
 	private TransactionRepository transactionRepository;
-	
-
-	@GetMapping("/findAllTransactions")
-	public List<Transaction> getTransactions() {
-		return transactionRepository.findAll();
-	}
 	
 	//Obtener una cuenta de banco
 	public ResponseEntity<BankAccount> getBankAccount(int idCuenta){
@@ -72,6 +67,22 @@ public class TransactionController {
 			return "Transaction made unsuccessfully: Check Bank Account";
 			
 		}
+	}
+	
+	@GetMapping("/findAllTransactions")
+	public List<Transaction> getAllTransactions() {
+		return transactionRepository.findAll();
+	}
+	
+	@GetMapping("/findTransaction/{idTransaccion}")
+	public Optional<Transaction> getTransaction(@PathVariable int idTransaccion) {
+		return transactionRepository.getByIdTransaccion(idTransaccion);
+	}
+	
+	@GetMapping("/deleteTransaction/{idTransaccion}")
+	public String deleteTransaction(@PathVariable int idTransaccion) {
+		transactionRepository.deleteByIdTransaccion(idTransaccion);
+		return "Deleted Transaction Successfully: " + idTransaccion;
 	}
 	
 }

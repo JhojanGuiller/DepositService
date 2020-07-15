@@ -1,0 +1,15 @@
+transactiondb:
+ image: mongo:latest
+ restart: always
+ container_name: "transactiondb"
+ ports:
+  - "27017:27017"
+
+transactionservice:
+ build: .
+ dockerfile: Dockerfile
+ container_name: transactionservice
+ ports: 
+  - "8084:8080"
+ links:
+  - transactiondb
