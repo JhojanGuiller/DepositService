@@ -1,2 +1,2 @@
-# DepositService
-Microservicio que registra los depósitos del cliente
+# TransactionService
+Microservicio que registra las transacciones del cliente
