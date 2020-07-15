@@ -1,4 +1,4 @@
-package com.jguiller.DepositService;
+package com.jguiller.TransactionService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication (exclude = {DataSourceAutoConfiguration.class})
-public class DepositServiceApplication {
+public class TransactionServiceApplication {
 
 	@Bean
 	public RestTemplate getRestTemplate() {
@@ -15,7 +15,7 @@ public class DepositServiceApplication {
 	}
 	
 	public static void main(String[] args) {
-		SpringApplication.run(DepositServiceApplication.class, args);
+		SpringApplication.run(TransactionServiceApplication.class, args);
 	}
 
 }

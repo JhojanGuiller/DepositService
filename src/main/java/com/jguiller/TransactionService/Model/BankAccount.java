@@ -1,4 +1,4 @@
-package com.jguiller.DepositService.Model;
+package com.jguiller.TransactionService.Model;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
