@@ -1,8 +1,6 @@
 package com.jguiller.TransactionService.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.jguiller.TransactionService.Model.Transaction;
@@ -17,8 +15,6 @@ public class TransactionService {
 	@Autowired
 	private TransactionRepository transactionRepository;
 	
-	private ResponseEntity<Transaction> notFound = ResponseEntity.notFound().build();
-	
 	// OBTENER TODAS LAS TRANSACCIONES
 	public Flux<Transaction> getAllTransactions() {
 		return transactionRepository.findAll();
@@ -30,21 +26,19 @@ public class TransactionService {
 	}
 	
 	// OBTENER UNA TRANSACCION POR ID
-	public Mono<ResponseEntity<Transaction>> getTransactionById(Integer id) {
-		return transactionRepository.findById(id)
-				.map(transac -> new ResponseEntity<Transaction>(transac, HttpStatus.OK))
-				.defaultIfEmpty(notFound);
+	public Mono<Transaction> getTransactionById(Integer id) {
+		return transactionRepository.findById(id);
 	}
 	
 	// ACTUALIZAR UNA TRANSACCION
-	public Mono<ResponseEntity<Transaction>> updateTransaction(Transaction transaction, Integer id) {
+	public Mono<Transaction> updateTransaction(Transaction transaction, Integer id) {
 		return transactionRepository.findById(id).flatMap(transac -> {
 			transac.setIdCuenta(transaction.getIdCuenta());
 			transac.setTipoTransaccion(transaction.getTipoTransaccion());
 			transac.setMontoTransaccion(transaction.getMontoTransaccion());
 			transac.setFechaTransaccion(transaction.getFechaTransaccion());
 			return transactionRepository.save(transac);
-		}).map(transac1 -> new ResponseEntity<Transaction>(transac1, HttpStatus.OK)).defaultIfEmpty(notFound);
+		});
 	}
 	
 	// ELIMINAR UNA TRANSACCION

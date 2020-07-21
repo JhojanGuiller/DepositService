@@ -82,13 +82,13 @@ public class TransactionController {
 	
 	// OBTENER UNA TRANSACCION POR ID
 	@GetMapping("/{idTransaccion}")
-	public Mono<ResponseEntity<Transaction>> getTransactionById(@PathVariable(value = "idTransaccion") int id) {
+	public Mono<Transaction> getTransactionById(@PathVariable(value = "idTransaccion") int id) {
 		return transactionService.getTransactionById(id);
 	}
 
 	// ACTUALIZAR UNA TRANSACCION
 	@PutMapping("/updateTransaction/{idTransaccion}")
-	public Mono<ResponseEntity<Transaction>> updateTransaction(@RequestBody Transaction transaction, @PathVariable(value = "idTransaccion") int id) {
+	public Mono<Transaction> updateTransaction(@RequestBody Transaction transaction, @PathVariable(value = "idTransaccion") int id) {
 		return transactionService.updateTransaction(transaction, id);
 	}
 	
