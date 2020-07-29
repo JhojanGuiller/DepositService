@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.jguiller.TransactionService.Model.BankAccount;
 import com.jguiller.TransactionService.Model.Transaction;
@@ -27,13 +28,16 @@ public class TransactionController {
 
 	@Autowired
 	private RestTemplate restTemplate;
+
+	@Autowired
+	private WebClient.Builder webClientBuilder;
 	
 	@Autowired
 	private TransactionService transactionService;
 	
-	//Obtener una cuenta de banco
+	// CALL TO BANK ACCOUNT MICROSERVICE BY IDCUENTA
 	public ResponseEntity<BankAccount> getBankAccount(int idCuenta){
-		String url = "http://localhost:8081/bankAccounts/" + idCuenta;
+		String url = "http://localhost:8803/bankAccounts/" + idCuenta;
 		ResponseEntity<BankAccount> cuentaBancaria = restTemplate.getForEntity(url, BankAccount.class);
 		if (cuentaBancaria.getBody() != null) {
 			return cuentaBancaria;
@@ -42,9 +46,18 @@ public class TransactionController {
 		}
 	}
 	
+	public Mono<BankAccount> getBankAccountByIdCuenta (int idCuenta){
+		return webClientBuilder.build()
+				.get()
+				.uri("http://localhost:8803/bankAccounts/" + idCuenta)
+				.retrieve()
+				.bodyToMono(BankAccount.class);
+	}
+	
+	
 	//Realizar la transaccion
 	public void madeTransaction(int idCuenta, String tipoTransaccion, Double montoTransaccion) {
-		String url = "http://localhost:8081/bankAccounts/updateBankAccountAmount" + "/" + idCuenta + "/" + tipoTransaccion + "?monto=" + montoTransaccion;
+		String url = "http://localhost:8803/bankAccounts/updateBankAccountAmount" + "/" + idCuenta + "/" + tipoTransaccion + "?monto=" + montoTransaccion;
 		
 		HashMap<String, Integer> params = new HashMap<String, Integer>();
 		params.put("idCuenta", idCuenta);
@@ -54,6 +67,14 @@ public class TransactionController {
 		restTemplate = new RestTemplate();
 		restTemplate.put(url, updateBankAccountAmount, params);
 		
+	}
+	
+	public void madeTransactionAmount(int idCuenta, String tipoTransaccion, Double montoTransaccion) {
+		webClientBuilder.build()
+		.put()
+		.uri("http://localhost:8803/bankAccounts/updateBankAccountAmount/" + idCuenta + "/" + tipoTransaccion + "?monto=" + montoTransaccion)
+		.retrieve()
+		.bodyToMono(BankAccount.class);
 	}
 	
 	// OBTENER TODAS LAS TRANSACCIONES
@@ -79,6 +100,24 @@ public class TransactionController {
 			
 		}
 	}
+	
+	// TEST MAKE TRANSACTION WITH WEBCLIENT
+	@PostMapping("/testmake")
+	public Mono<Transaction> testmake(@RequestBody Transaction transaction) {
+		Mono<BankAccount> cuentaBancaria = getBankAccountByIdCuenta(transaction.getIdCuenta());
+		
+		//Validar si existe una cuenta bancaria existente
+		if (cuentaBancaria != null) {
+			
+			madeTransactionAmount(transaction.getIdCuenta(), transaction.getTipoTransaccion(), transaction.getMontoTransaccion());
+			return transactionService.createTransaction(transaction);
+			
+		}else {
+			
+			return null;
+			
+		}
+	} 
 	
 	// OBTENER UNA TRANSACCION POR ID
 	@GetMapping("/{idTransaccion}")
