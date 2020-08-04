@@ -73,6 +73,7 @@ public class TransactionController {
 		webClientBuilder.build()
 		.put()
 		.uri("http://localhost:8803/bankAccounts/updateBankAccountAmount/" + idCuenta + "/" + tipoTransaccion + "?monto=" + montoTransaccion)
+		.body(Mono.just(idCuenta), BankAccount.class)
 		.retrieve()
 		.bodyToMono(BankAccount.class);
 	}
